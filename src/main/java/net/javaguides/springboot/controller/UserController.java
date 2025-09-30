@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -25,13 +26,8 @@ public class UserController {
     // Build get user by id REST API
     // http://localhost:8080/api/users/1
     @GetMapping("{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long userId) {
-        try {
-            UserDto user = userService.getUserByID(userId); // Соответствует сервису
-            return user != null ? new ResponseEntity<>(user, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserByID(id));
     }
 
     // Build get all users REST API
@@ -52,8 +48,8 @@ public class UserController {
 
     // Build delete user REST API
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long userId) {
+    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable("id") Long userId) {
         userService.deleteUser(userId);
-        return new ResponseEntity<>("User successfully deleted!", HttpStatus.OK);
+        return ResponseEntity.ok(Map.of("message", "User successfully deleted!"));
     }
 }
